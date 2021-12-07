@@ -5,30 +5,28 @@ import EVENTS from "../config/events";
 
 interface Context {
     socket: Socket,
-    rooms: object,
-    roomId?: string
+    roomId?: string,
+    username?: string,
+    setUsername: Function
 }
 
 const socket = io(SOCKET_URL)
 
 const SocketContext = createContext<Context>({
     socket,
-    rooms: {}
+    setUsername: () => false
 })
 
 const SocketsProvider = (props: any) => {
-    const [rooms, setRooms] = useState({});
     const [roomId, setRoomId] = useState("");
-
-    // Set rooms when receiving message from server
-    socket.on(EVENTS.SERVER.ROOMS, (value) => setRooms(value))
+    const [username, setUsername] = useState("");
 
     socket.on(EVENTS.SERVER.JOINED_ROOM, (value) => {
         setRoomId(value);
     })
 
     return (
-        <SocketContext.Provider value={{ socket, rooms, roomId }} {...props} />
+        <SocketContext.Provider value={{ socket, roomId, username, setUsername }} {...props} />
     )
 }
 
