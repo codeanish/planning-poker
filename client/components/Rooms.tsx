@@ -1,9 +1,13 @@
-import { useSockets } from "../context/socket.context";
 import EVENTS from "../config/events";
-import { useRef } from "react";
+import { useContext, useRef } from "react";
+import socketService from "../services/socketService";
+import gameContext from "../context/gameContext";
 
 const Rooms = () => {
-    const { socket, roomId } = useSockets()
+    const {
+        setIsInRoom
+    } = useContext(gameContext)
+    
     const newRoomRef = useRef(null);
 
     const handleCreateRoom = () => {
@@ -11,7 +15,8 @@ const Rooms = () => {
         if (!String(roomName).trim()) {
             return;
         }
-        socket.emit(EVENTS.CLIENT.CREATE_ROOM, { roomName });
+        socketService.socket.emit(EVENTS.CLIENT.CREATE_ROOM, { roomName });
+        setIsInRoom(true);
         newRoomRef.current.value = "";
     }
 

@@ -40,7 +40,7 @@ const socket = ({ io }: { io: Server }) => {
             if (roomIdFromRoomName) {
                 logger.info(`Room ${roomName} already exists with ID ${roomIdFromRoomName}. Joining.`);
                 socket.join(roomIdFromRoomName)
-                socket.to(socket.id).emit(EVENTS.SERVER.JOINED_ROOM, roomIdFromRoomName);
+                socket.emit(EVENTS.SERVER.JOINED_ROOM, roomIdFromRoomName);
                 socket.to(roomIdFromRoomName).emit(EVENTS.SERVER.NEW_PLAYER_JOINED, users[socket.id])
                 return;
             }

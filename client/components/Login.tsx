@@ -1,9 +1,13 @@
-import { useEffect, useRef } from "react";
+import { useContext, useEffect, useRef } from "react";
 import EVENTS from "../config/events";
-import { useSockets } from "../context/socket.context";
+import gameContext from "../context/gameContext";
+import socketService from "../services/socketService";
 
 const Login = () => {
-    const { socket, username, setUsername } = useSockets()
+    const { 
+        username,
+        setUsername
+    } = useContext(gameContext)
 
     const usernameRef = useRef(null);
 
@@ -14,10 +18,10 @@ const Login = () => {
         }
 
         setUsername(value);
-
+        
         localStorage.setItem("username", value)
 
-        socket.emit(EVENTS.CLIENT.LOGIN, value)
+        socketService.socket.emit(EVENTS.CLIENT.LOGIN, value)
     }
 
     useEffect(() => {
