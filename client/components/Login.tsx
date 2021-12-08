@@ -1,8 +1,9 @@
 import { useEffect, useRef } from "react";
+import EVENTS from "../config/events";
 import { useSockets } from "../context/socket.context";
 
 const Login = () => {
-    const { username, setUsername } = useSockets()
+    const { socket, username, setUsername } = useSockets()
 
     const usernameRef = useRef(null);
 
@@ -15,6 +16,8 @@ const Login = () => {
         setUsername(value);
 
         localStorage.setItem("username", value)
+
+        socket.emit(EVENTS.CLIENT.LOGIN, value)
     }
 
     useEffect(() => {

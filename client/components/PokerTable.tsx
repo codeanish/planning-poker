@@ -4,7 +4,7 @@ import { useSockets } from "../context/socket.context";
 
 const PokerTable = () => {
 
-    const { socket, username, roomId } = useSockets()
+    const { socket, username, roomId, scores, setScores } = useSockets()
     const scoreRef = useRef(null);
 
     const handleSubmitScore = () => {
@@ -12,9 +12,12 @@ const PokerTable = () => {
         console.log(score)
         if (score !== null) {
             console.log("Emitting score event")
-            socket.emit(EVENTS.CLIENT.PLAY_CARD, { username, score })
+            setScores({ ...scores, [username]: score });
+            socket.emit(EVENTS.CLIENT.PLAY_CARD, { username, roomId, score })
         }
     }
+
+    console.log(scores);
     return (
         <div>
             <h1>Poker Table</h1>
