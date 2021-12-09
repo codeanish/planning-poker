@@ -4,7 +4,8 @@ const EVENTS = {
         ROOMS: "rooms",
         JOINED_ROOM: "joined_room",
         PLAYED_CARD: "played_card",
-        NEW_PLAYER_JOINED: "new_player_joined"
+        NEW_PLAYER_JOINED: "new_player_joined",
+        ERROR: "error"
     },
     CLIENT: {
         CREATE_ROOM: "create_room",

@@ -2,21 +2,31 @@ import EVENTS from "../config/events";
 import { useContext, useRef } from "react";
 import socketService from "../services/socketService";
 import gameContext from "../context/gameContext";
+import gameService from "../services/gameService";
 
 const Rooms = () => {
     const {
-        setIsInRoom
+        setIsInRoom,
+        setRoomId
     } = useContext(gameContext)
-    
+
     const newRoomRef = useRef(null);
 
-    const handleCreateRoom = () => {
+    const handleCreateRoom = async () => {
         const roomName = newRoomRef.current.value || ''
         if (!String(roomName).trim()) {
             return;
         }
-        socketService.socket.emit(EVENTS.CLIENT.CREATE_ROOM, { roomName });
-        setIsInRoom(true);
+        const roomId = await gameService
+            .joinGameRoom(socketService.socket, roomName)
+            .catch((err) => {
+                alert(err);
+            });
+        console.log(roomId)
+        if (roomId) {
+            setRoomId(roomId)
+            setIsInRoom(true);
+        }
         newRoomRef.current.value = "";
     }
 

@@ -1,28 +1,45 @@
-import { useRef } from "react";
+import { useContext, useEffect, useRef } from "react";
 import EVENTS from "../config/events";
-import { useSockets } from "../context/socket.context";
+import gameContext from "../context/gameContext";
+import gameService from "../services/gameService";
+import socketService from "../services/socketService";
 
 const PokerTable = () => {
 
-    const { socket, username, roomId, scores, setScores } = useSockets()
+    const { username, roomId, setScores, scores } = useContext(gameContext)
     const scoreRef = useRef(null);
 
     const handleSubmitScore = () => {
         const score = scoreRef.current.value || null
-        console.log(score)
         if (score !== null) {
-            console.log("Emitting score event")
-            setScores({ ...scores, [username]: score });
-            socket.emit(EVENTS.CLIENT.PLAY_CARD, { username, roomId, score })
+            gameService.playCard(socketService.socket, username, roomId, score);
         }
     }
 
-    console.log(scores);
+    const handleGameUpdate = () => {
+        gameService.onScoreUpdate(socketService.socket, ({ username, score }) => {
+            if (username in scores) {
+                console.log(`User ${username} already exists in scores. Updating`)
+            }
+            if (Object.keys(scores).length) {
+                console.log("Setting Scores")
+                setScores({ username: score })
+            } else {
+                console.log("Setting scores")
+                setScores({ ...scores, [username]: score })
+            }
+            console.log(scores)
+        })
+    }
+
+    useEffect(() => {
+        handleGameUpdate();
+    }, [])
+
     return (
         <div>
             <h1>Poker Table</h1>
             <p>Username: {username}</p>
-            <p>RoomId: {roomId}</p>
             <input placeholder="Score" ref={scoreRef} />
             <button onClick={handleSubmitScore}>Submit Score</button>
         </div>

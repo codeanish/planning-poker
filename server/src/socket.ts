@@ -9,7 +9,8 @@ const EVENTS = {
         ROOMS: "rooms",
         JOINED_ROOM: "joined_room",
         PLAYED_CARD: "played_card",
-        NEW_PLAYER_JOINED: "new_player_joined"
+        NEW_PLAYER_JOINED: "new_player_joined",
+        ERROR: "error"
     },
     CLIENT: {
         CREATE_ROOM: "create_room",
@@ -56,7 +57,7 @@ const socket = ({ io }: { io: Server }) => {
 
         socket.on(EVENTS.CLIENT.PLAY_CARD, ({ username, roomId, score }) => {
             logger.info(`UserID: ${username}, RoomID: ${roomId}, Score: ${score}`)
-            socket.to(roomId).emit(EVENTS.SERVER.PLAYED_CARD, { username, score })
+            io.in(roomId).emit(EVENTS.SERVER.PLAYED_CARD, { username, score })
         })
 
         socket.on(EVENTS.CLIENT.LOGIN, (value) => {

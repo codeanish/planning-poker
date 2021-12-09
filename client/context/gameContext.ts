@@ -6,16 +6,20 @@ export interface IGameContext {
     username: string,
     setUsername: (name: string) => void,
     scores: object,
-    setScores: (scores: object) => void
+    setScores: (scores: object) => void,
+    roomId: string,
+    setRoomId: (roomId: string) => void
 }
 
-const defaultState : IGameContext = {
+const defaultState: IGameContext = {
     isInRoom: false,
-    setIsInRoom: () => {},
+    setIsInRoom: () => { },
     username: "",
-    setUsername: () => {},
+    setUsername: () => { },
     scores: {},
-    setScores: () => {}
+    setScores: () => { },
+    roomId: "",
+    setRoomId: () => { }
 }
 
 export default createContext(defaultState);

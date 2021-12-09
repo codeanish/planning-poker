@@ -8,6 +8,7 @@ function MyApp({ Component, pageProps }) {
   const [isInRoom, setIsInRoom] = useState(false);
   const [username, setUsername] = useState("");
   const [scores, setScores] = useState({});
+  const [roomId, setRoomId] = useState("");
 
   const connectSocket = async () => {
     const socket = await socketService
@@ -15,7 +16,7 @@ function MyApp({ Component, pageProps }) {
       .catch((err) => {
         console.log("Error: ", err);
       });
-      console.log(socket)
+    console.log(socket)
   };
 
   // Use useEffect to only do a connectSocket on startup, not on every render
@@ -26,10 +27,12 @@ function MyApp({ Component, pageProps }) {
   const gameContextValue: IGameContext = {
     isInRoom,
     setIsInRoom,
-    username, 
+    username,
     setUsername,
     scores,
-    setScores
+    setScores,
+    roomId,
+    setRoomId
   }
 
   return <GameContext.Provider value={gameContextValue}><Component {...pageProps} /></GameContext.Provider>
