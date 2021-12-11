@@ -7,7 +7,10 @@ import gameService from "../services/gameService";
 const Rooms = () => {
     const {
         setIsInRoom,
-        setRoomId
+        setRoomId,
+        users,
+        setUsers,
+        username
     } = useContext(gameContext)
 
     const newRoomRef = useRef(null);
@@ -17,14 +20,15 @@ const Rooms = () => {
         if (!String(roomName).trim()) {
             return;
         }
-        const roomId = await gameService
-            .joinGameRoom(socketService.socket, roomName)
+        const roomUser = await gameService
+            .joinGameRoom(socketService.socket, roomName, username)
             .catch((err) => {
                 alert(err);
             });
-        console.log(roomId)
-        if (roomId) {
-            setRoomId(roomId)
+        if (roomUser) {
+            console.log(roomUser)
+            setRoomId(roomUser.roomId)
+            setUsers([...users, roomUser.user])
             setIsInRoom(true);
         }
         newRoomRef.current.value = "";

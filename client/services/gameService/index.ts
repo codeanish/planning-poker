@@ -1,13 +1,19 @@
 import { Socket } from "socket.io-client";
 import EVENTS from "../../config/events";
 
+export interface IRoomUser {
+    roomId: string,
+    user: string
+}
 
 class GameService {
-    public async joinGameRoom(socket: Socket, roomName: string): Promise<string> {
+    public async joinGameRoom(socket: Socket, roomName: string, user: string): Promise<IRoomUser> {
         return new Promise((resolve, reject) => {
-            socket.emit(EVENTS.CLIENT.CREATE_ROOM, { roomName });
-            socket.on(EVENTS.SERVER.JOINED_ROOM, (roomId) => {
-                resolve(roomId)
+            socket.emit(EVENTS.CLIENT.CREATE_ROOM, { roomName, user });
+            socket.on(EVENTS.SERVER.JOINED_ROOM, ({ roomId, user }) => {
+                console.log(roomId)
+                console.log(user)
+                resolve({ roomId, user })
             })
             socket.on(EVENTS.SERVER.ERROR, ({ error }) => reject(error))
         })

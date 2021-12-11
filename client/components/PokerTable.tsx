@@ -2,19 +2,12 @@ import { useContext, useEffect, useRef } from "react";
 import gameContext from "../context/gameContext";
 import gameService from "../services/gameService";
 import socketService from "../services/socketService";
+import CardOptions from "./CardOptions";
 
 const PokerTable = () => {
 
-    const { username, roomId, setScores, scores } = useContext(gameContext)
-    const scoreRef = useRef(null);
+    const { username, setScores, scores } = useContext(gameContext)
     const scoresRef = useRef({});
-
-    const handleSubmitScore = () => {
-        const score = scoreRef.current.value || null
-        if (score !== null) {
-            gameService.playCard(socketService.socket, username, roomId, score);
-        }
-    }
 
     // Using a reference to current scores here as the initial state passed in here is updated over time
     const handleGameUpdate = () => {
@@ -37,8 +30,7 @@ const PokerTable = () => {
         <div>
             <h1>Poker Table</h1>
             <p>Username: {username}</p>
-            <input placeholder="Score" ref={scoreRef} />
-            <button onClick={handleSubmitScore}>Submit Score</button>
+            <CardOptions />
         </div>
     )
 }
