@@ -1,4 +1,4 @@
-import { useContext, useEffect, useRef } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import EVENTS from "../config/events";
 import gameContext from "../context/gameContext";
 import gameService from "../services/gameService";
@@ -8,6 +8,7 @@ const PokerTable = () => {
 
     const { username, roomId, setScores, scores } = useContext(gameContext)
     const scoreRef = useRef(null);
+    const scoresRef = useRef({});
 
     const handleSubmitScore = () => {
         const score = scoreRef.current.value || null
@@ -16,25 +17,22 @@ const PokerTable = () => {
         }
     }
 
+    // Using a reference to current scores here as the initial state passed in here is updated over time
     const handleGameUpdate = () => {
         gameService.onScoreUpdate(socketService.socket, ({ username, score }) => {
-            if (username in scores) {
-                console.log(`User ${username} already exists in scores. Updating`)
-            }
-            if (Object.keys(scores).length) {
-                console.log("Setting Scores")
-                setScores({ username: score })
-            } else {
-                console.log("Setting scores")
-                setScores({ ...scores, [username]: score })
-            }
-            console.log(scores)
+            setScores({ ...scoresRef.current, [username]: score })
         })
     }
 
     useEffect(() => {
+        scoresRef.current = scores
         handleGameUpdate();
     }, [])
+
+    // When score update is triggered, update the scoresRef to the new scores object
+    useEffect(() => {
+        scoresRef.current = scores
+    }, [scores])
 
     return (
         <div>
