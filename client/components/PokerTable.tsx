@@ -1,5 +1,4 @@
-import { useContext, useEffect, useRef, useState } from "react";
-import EVENTS from "../config/events";
+import { useContext, useEffect, useRef } from "react";
 import gameContext from "../context/gameContext";
 import gameService from "../services/gameService";
 import socketService from "../services/socketService";
