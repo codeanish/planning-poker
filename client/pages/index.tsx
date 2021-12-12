@@ -4,15 +4,22 @@ import PokerTable from "../components/PokerTable";
 import Rooms from "../components/Rooms"
 import gameContext from "../context/gameContext";
 import socketService from "../services/socketService";
-
+import styled from "styled-components"
 
 export default function Home() {
 
-  // const { socket, username, roomId } = useSockets()
-  const{ username, isInRoom } = useContext(gameContext)
+  const { username, isInRoom } = useContext(gameContext)
+
+  const StyledContainer = styled.div`
+    display: flex;
+    justify-content: center;
+    min-height: 100vh;
+    align-items: center;
+    text-align: center;
+  `;
 
   return (
-    <div>
+    <StyledContainer>
       {!username && (
         <Login />
       )}
@@ -27,6 +34,6 @@ export default function Home() {
         </div>
       )}
 
-    </div>
+    </StyledContainer>
   )
 }
