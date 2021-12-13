@@ -14,6 +14,7 @@ const EVENTS = {
     },
     CLIENT: {
         CREATE_ROOM: "create_room",
+        JOIN_ROOM: "join_room",
         PLAY_CARD: "play_card",
         LOGIN: "login"
     }
@@ -35,9 +36,8 @@ const socket = ({ io }: { io: Server }) => {
         // Send connected user list of rooms
         socket.emit(EVENTS.SERVER.ROOMS, rooms);
 
-        socket.on(EVENTS.CLIENT.CREATE_ROOM, ({ roomName, user }) => {
-            logger.info({ roomName });
-            logger.info({ user });
+        socket.on(EVENTS.CLIENT.JOIN_ROOM, ({ roomName, user }) => {
+            logger.info(`Attempting to join ${roomName}`);
             const roomIdFromRoomName = getRoomIdFromRoomName(roomName);
             if (roomIdFromRoomName) {
                 logger.info(`Room ${roomName} already exists with ID ${roomIdFromRoomName}. Joining.`);
@@ -46,9 +46,16 @@ const socket = ({ io }: { io: Server }) => {
                 socket.to(roomIdFromRoomName).emit(EVENTS.SERVER.NEW_PLAYER_JOINED, users[socket.id])
                 return;
             }
+        })
 
+        socket.on(EVENTS.CLIENT.CREATE_ROOM, ({ roomName, user }) => {
+            const roomIdFromRoomName = getRoomIdFromRoomName(roomName);
+            if (roomIdFromRoomName) {
+                socket.emit(EVENTS.SERVER.ERROR, `Room ${roomName} already exists`);
+                return;
+            }
             const roomId = nanoid()
-            logger.info(`Creating Room with ID: ${roomId}. Joining.`);
+            logger.info(`Creating Room with ID: ${roomId} and Name: ${roomName}.`);
             rooms[roomId] = {
                 name: roomName
             }

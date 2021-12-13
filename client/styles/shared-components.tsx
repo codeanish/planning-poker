@@ -5,8 +5,12 @@ display: flex;
 flex-direction: column;
 `;
 
+export const StyledRowContainer = styled.div`
+display: flex;
+justify-content: space-around;
+`;
+
 export const StyledInput = styled.input`
-width: 200px;
 padding: 10px;
 margin: 10px 0;
 border: 0;
@@ -19,4 +23,5 @@ export const StyledButton = styled.button`
 border: 0;
 border-radius: 5px;
 padding: 10px;
+min-width: 120px;
 `

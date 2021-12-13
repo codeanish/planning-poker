@@ -10,14 +10,23 @@ export interface IRoomUser {
 class GameService {
     public async joinGameRoom(socket: Socket, roomName: string, user: string): Promise<IRoomUser> {
         return new Promise((resolve, reject) => {
-            socket.emit(EVENTS.CLIENT.CREATE_ROOM, { roomName, user });
+            socket.emit(EVENTS.CLIENT.JOIN_ROOM, { roomName, user });
             socket.on(EVENTS.SERVER.JOINED_ROOM, ({ roomId, user, roomName }) => {
-                console.log(roomId)
-                console.log(user)
-                console.log(roomName)
+                console.log(`User ${user} Joined ${roomName} with ID ${roomId}`)
                 resolve({ roomId, user, roomName })
             })
-            socket.on(EVENTS.SERVER.ERROR, ({ error }) => reject(error))
+            socket.on(EVENTS.SERVER.ERROR, (error) => reject(error))
+        })
+    }
+
+    public async createGameRoom(socket: Socket, roomName: string, user: string): Promise<IRoomUser> {
+        return new Promise((resolve, reject) => {
+            socket.emit(EVENTS.CLIENT.CREATE_ROOM, { roomName, user });
+            socket.on(EVENTS.SERVER.JOINED_ROOM, ({ roomId, user, roomName }) => {
+                console.log(`User ${user} created ${roomName} with ID ${roomId}`)
+                resolve({ roomId, user, roomName })
+            })
+            socket.on(EVENTS.SERVER.ERROR, (error) => reject(error))
         })
     }
 
