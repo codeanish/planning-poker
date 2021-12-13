@@ -1,7 +1,7 @@
 import { useContext, useEffect, useRef } from "react";
 import gameContext from "../context/gameContext";
-import gameService from "../services/gameService";
-import socketService from "../services/socketService";
+import gameService from "../services/GameService";
+import socketService from "../services/SocketService";
 import CardOptions from "./CardOptions";
 
 const PokerTable = () => {

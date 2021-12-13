@@ -1,7 +1,7 @@
 import { useContext, useEffect, useRef } from "react";
 import EVENTS from "../config/events";
 import gameContext from "../context/gameContext";
-import socketService from "../services/socketService";
+import socketService from "../services/SocketService";
 import {StyledButton, StyledColumnContainer, StyledInput} from "../styles/shared-components"
 
 const Login = () => {

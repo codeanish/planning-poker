@@ -1,5 +1,5 @@
 import { Socket } from "socket.io-client";
-import EVENTS from "../../config/events";
+import EVENTS from "../config/events"
 
 export interface IRoomUser {
     roomId: string,

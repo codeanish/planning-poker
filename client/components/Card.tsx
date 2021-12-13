@@ -1,8 +1,8 @@
 import React, { useContext } from 'react'
 import styled from "styled-components"
 import gameContext from '../context/gameContext';
-import gameService from '../services/gameService';
-import socketService from '../services/socketService';
+import gameService from '../services/GameService';
+import socketService from '../services/SocketService';
 
 const StyledCard = styled.button`
     height: 100px;

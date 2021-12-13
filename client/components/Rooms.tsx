@@ -1,7 +1,7 @@
 import { useContext, useRef } from "react";
-import socketService from "../services/socketService";
+import socketService from "../services/SocketService";
 import gameContext from "../context/gameContext";
-import gameService from "../services/gameService";
+import gameService from "../services/GameService";
 import { StyledColumnContainer, StyledInput, StyledButton } from "../styles/shared-components";
 
 const Rooms = () => {

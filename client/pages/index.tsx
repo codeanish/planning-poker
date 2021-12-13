@@ -1,9 +1,8 @@
-import { useContext, useEffect, useRef } from "react";
+import { useContext } from "react";
 import Login from "../components/Login";
 import PokerTable from "../components/PokerTable";
 import Rooms from "../components/Rooms"
 import gameContext from "../context/gameContext";
-import socketService from "../services/socketService";
 import styled from "styled-components"
 
 const StyledContainer = styled.div`
