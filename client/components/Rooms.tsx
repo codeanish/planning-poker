@@ -1,8 +1,8 @@
-import EVENTS from "../config/events";
 import { useContext, useRef } from "react";
 import socketService from "../services/socketService";
 import gameContext from "../context/gameContext";
 import gameService from "../services/gameService";
+import { StyledColumnContainer, StyledInput, StyledButton } from "../styles/shared-components";
 
 const Rooms = () => {
     const {
@@ -31,15 +31,13 @@ const Rooms = () => {
             setUsers([...users, roomUser.user])
             setIsInRoom(true);
         }
-        newRoomRef.current.value = "";
     }
 
     return (
-        <div>
-            <h1>Rooms</h1>
-            <input ref={newRoomRef} placeholder="Room Name" />
-            <button onClick={handleCreateRoom}>CREATE OR JOIN ROOM</button>
-        </div >
+        <StyledColumnContainer>
+            <StyledInput ref={newRoomRef} placeholder="Room Name" />
+            <StyledButton onClick={handleCreateRoom}>CREATE OR JOIN ROOM</StyledButton>
+        </StyledColumnContainer>
     )
 }
 

@@ -6,17 +6,17 @@ import gameContext from "../context/gameContext";
 import socketService from "../services/socketService";
 import styled from "styled-components"
 
+const StyledContainer = styled.div`
+display: flex;
+justify-content: center;
+min-height: 100vh;
+align-items: center;
+text-align: center;
+`;
+
 export default function Home() {
 
   const { username, isInRoom } = useContext(gameContext)
-
-  const StyledContainer = styled.div`
-    display: flex;
-    justify-content: center;
-    min-height: 100vh;
-    align-items: center;
-    text-align: center;
-  `;
 
   return (
     <StyledContainer>
@@ -25,9 +25,9 @@ export default function Home() {
       )}
       {username && (
         <div>
-          <h1>Hello World</h1>
-          <h2>{socketService.socket.id}</h2>
-          <Rooms />
+          {!isInRoom && (
+            <Rooms />
+          )}
           {isInRoom && (
             <PokerTable />
           )}
