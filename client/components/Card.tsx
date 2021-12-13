@@ -5,9 +5,12 @@ import gameService from '../services/GameService';
 import socketService from '../services/SocketService';
 
 const StyledCard = styled.button`
-    height: 100px;
+    height: 150px;
     width: 100px;
     padding: 20px;
+    margin: 20px;
+    border-radius: 5px;
+    border: 0;
 `;
 
 interface ICard {
