@@ -42,7 +42,7 @@ const socket = ({ io }: { io: Server }) => {
             if (roomIdFromRoomName) {
                 logger.info(`Room ${roomName} already exists with ID ${roomIdFromRoomName}. Joining.`);
                 socket.join(roomIdFromRoomName)
-                socket.emit(EVENTS.SERVER.JOINED_ROOM, { roomIdFromRoomName, user });
+                socket.emit(EVENTS.SERVER.JOINED_ROOM, { roomIdFromRoomName, user, roomName });
                 socket.to(roomIdFromRoomName).emit(EVENTS.SERVER.NEW_PLAYER_JOINED, users[socket.id])
                 return;
             }
@@ -53,7 +53,7 @@ const socket = ({ io }: { io: Server }) => {
                 name: roomName
             }
             socket.join(roomId)
-            socket.emit(EVENTS.SERVER.JOINED_ROOM, { roomId, user })
+            socket.emit(EVENTS.SERVER.JOINED_ROOM, { roomId, user, roomName })
         })
 
         socket.on(EVENTS.CLIENT.PLAY_CARD, ({ username, roomId, score }) => {

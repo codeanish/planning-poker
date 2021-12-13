@@ -10,6 +10,7 @@ function MyApp({ Component, pageProps }) {
   const [scores, setScores] = useState({});
   const [roomId, setRoomId] = useState("");
   const [users, setUsers] = useState([]);
+  const [roomName, setRoomName] = useState("");
 
   const connectSocket = async () => {
     const socket = await socketService
@@ -35,7 +36,9 @@ function MyApp({ Component, pageProps }) {
     roomId,
     setRoomId,
     users,
-    setUsers
+    setUsers,
+    roomName,
+    setRoomName
   }
 
   return <GameContext.Provider value={gameContextValue}><Component {...pageProps} /></GameContext.Provider>

@@ -10,7 +10,8 @@ const Rooms = () => {
         setRoomId,
         users,
         setUsers,
-        username
+        username,
+        setRoomName
     } = useContext(gameContext)
 
     const newRoomRef = useRef(null);
@@ -29,6 +30,7 @@ const Rooms = () => {
             console.log(roomUser)
             setRoomId(roomUser.roomId)
             setUsers([...users, roomUser.user])
+            setRoomName(roomUser.roomName)
             setIsInRoom(true);
         }
     }

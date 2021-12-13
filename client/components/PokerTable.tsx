@@ -6,7 +6,7 @@ import CardOptions from "./CardOptions";
 
 const PokerTable = () => {
 
-    const { username, setScores, scores } = useContext(gameContext)
+    const { username, setScores, scores, roomId, roomName } = useContext(gameContext)
     const scoresRef = useRef({});
 
     // Using a reference to current scores here as the initial state passed in here is updated over time
@@ -28,8 +28,7 @@ const PokerTable = () => {
 
     return (
         <div>
-            <h1>Poker Table</h1>
-            <p>Username: {username}</p>
+            <h1>Room {roomName}</h1>
             <CardOptions />
         </div>
     )
