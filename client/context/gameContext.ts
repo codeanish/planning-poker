@@ -1,5 +1,10 @@
 import { createContext } from "react"
 
+export interface IRoom {
+    roomId: string,
+    roomName: string
+}
+
 export interface IGameContext {
     isInRoom: boolean,
     setIsInRoom: (inRoom: boolean) => void,
@@ -13,8 +18,8 @@ export interface IGameContext {
     setUsers: (users: string[]) => void,
     roomName: string,
     setRoomName: (roomName: string) => void,
-    rooms: string[],
-    setRooms: (rooms: string[]) => void
+    rooms: IRoom[],
+    setRooms: (rooms: IRoom[]) => void
 }
 
 const defaultState: IGameContext = {

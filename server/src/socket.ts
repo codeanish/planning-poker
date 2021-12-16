@@ -16,7 +16,8 @@ const EVENTS = {
         CREATE_ROOM: "create_room",
         JOIN_ROOM: "join_room",
         PLAY_CARD: "play_card",
-        LOGIN: "login"
+        LOGIN: "login",
+        GET_ROOMS: "get_rooms"
     }
 }
 
@@ -34,7 +35,12 @@ const socket = ({ io }: { io: Server }) => {
     io.on(EVENTS.CONNECTION, (socket: Socket) => {
         logger.info(`User connected: ${socket.id}`)
         // Send connected user list of rooms
+
         socket.emit(EVENTS.SERVER.ROOMS, rooms);
+
+        socket.on(EVENTS.CLIENT.GET_ROOMS, () => {
+            socket.emit(EVENTS.SERVER.ROOMS, rooms);
+        })
 
         socket.on(EVENTS.CLIENT.JOIN_ROOM, ({ roomName, user }) => {
             logger.info(`Attempting to join ${roomName}`);

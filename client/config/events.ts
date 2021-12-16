@@ -11,7 +11,8 @@ const EVENTS = {
         CREATE_ROOM: "create_room",
         JOIN_ROOM: "join_room",
         PLAY_CARD: "play_card",
-        LOGIN: "login"
+        LOGIN: "login",
+        GET_ROOMS: "get_rooms"
     }
 }
 

@@ -1,5 +1,6 @@
 import { Socket } from "socket.io-client";
 import EVENTS from "../config/events"
+import { IRoom } from "../context/gameContext";
 
 export interface IRoomUser {
     roomId: string,
@@ -14,6 +15,24 @@ class GameService {
             socket.on(EVENTS.SERVER.JOINED_ROOM, ({ roomId, user, roomName }) => {
                 console.log(`User ${user} Joined ${roomName} with ID ${roomId}`)
                 resolve({ roomId, user, roomName })
+            })
+            socket.on(EVENTS.SERVER.ERROR, (error) => reject(error))
+        })
+    }
+
+    public async getRooms(socket: Socket): Promise<IRoom[]> {
+        return new Promise((resolve, reject) => {
+            socket.emit(EVENTS.CLIENT.GET_ROOMS)
+            socket.on(EVENTS.SERVER.ROOMS, (rooms: Object) => {
+                console.log(`Rooms: ${rooms}`)
+                const availableRooms: IRoom[] = []
+                Object.keys(rooms).map((key, index) => {
+                    console.log(`RoomID: ${key}, RoomName: ${rooms[key].name}`)
+                    const roomId = key
+                    const roomName = rooms[key].name
+                    availableRooms.push({ roomId, roomName })
+                })
+                resolve(availableRooms)
             })
             socket.on(EVENTS.SERVER.ERROR, (error) => reject(error))
         })

@@ -1,4 +1,4 @@
-import { useContext, useRef } from "react";
+import { useContext, useEffect, useRef } from "react";
 import socketService from "../services/SocketService";
 import gameContext from "../context/gameContext";
 import gameService from "../services/GameService";
@@ -17,10 +17,28 @@ const Rooms = () => {
         users,
         setUsers,
         username,
-        setRoomName
+        setRoomName,
+        rooms,
+        setRooms
     } = useContext(gameContext)
 
     const newRoomRef = useRef(null);
+
+    useEffect(() => {
+        getAvailableRooms()
+    }, [])
+
+    const getAvailableRooms = async () => {
+        const availableRooms = await gameService.getRooms(socketService.socket)
+            .catch((err) => {
+                alert(err);
+            });
+
+        if (availableRooms) {
+            console.log(availableRooms)
+            setRooms(availableRooms);
+        }
+    }
 
     const handleCreateRoom = async () => {
         const roomName = newRoomRef.current.value || ''
@@ -62,10 +80,10 @@ const Rooms = () => {
         <StyledRoomsContainer>
             <StyledColumnContainer>
                 <StyledInput ref={newRoomRef} placeholder="Room Name" />
-                <StyledRowContainer>
-                    <StyledButton onClick={handleCreateRoom}>CREATE ROOM</StyledButton>
-                    <StyledButton onClick={handleJoinRoom}>JOIN ROOM</StyledButton>
-                </StyledRowContainer>
+                <StyledButton onClick={handleCreateRoom}>CREATE ROOM</StyledButton>
+                <ul>
+                    {rooms.map(room => (<li key={room.roomId}>{room.roomName}</li>))}
+                </ul>
             </StyledColumnContainer>
         </StyledRoomsContainer>
     )
