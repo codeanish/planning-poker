@@ -10,6 +10,19 @@ const StyledRoomsContainer = styled.div`
     height: 250px;
 `;
 
+const StyledRoomList = styled.div`
+    display: flex;
+`
+
+const StyledRoomButton = styled.button`
+    height: 150px;
+    width: 100px;
+    padding: 20px;
+    margin: 20px;
+    border-radius: 5px;
+    border: 0;
+`;
+
 const Rooms = () => {
     const {
         setIsInRoom,
@@ -58,11 +71,10 @@ const Rooms = () => {
         }
     }
 
-    const handleJoinRoom = async () => {
-        const roomName = newRoomRef.current.value || ''
-        if (!String(roomName).trim()) {
-            return;
-        }
+    const handleJoinRoom = async (e) => {
+        // The room name on the button
+        const roomName = e.target.innerText;
+
         const roomUser = await gameService
             .joinGameRoom(socketService.socket, roomName, username)
             .catch((err) => {
@@ -81,9 +93,9 @@ const Rooms = () => {
             <StyledColumnContainer>
                 <StyledInput ref={newRoomRef} placeholder="Room Name" />
                 <StyledButton onClick={handleCreateRoom}>CREATE ROOM</StyledButton>
-                <ul>
-                    {rooms.map(room => (<li key={room.roomId}>{room.roomName}</li>))}
-                </ul>
+                <StyledRoomList>
+                    {rooms.map(room => (<StyledRoomButton key={room.roomId} onClick={handleJoinRoom}>{room.roomName}</StyledRoomButton>))}
+                </StyledRoomList>
             </StyledColumnContainer>
         </StyledRoomsContainer>
     )
