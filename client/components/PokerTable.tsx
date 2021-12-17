@@ -16,9 +16,23 @@ const PokerTable = () => {
         })
     }
 
+    const handleNewPlayerJoining = () => {
+        gameService.onNewPlayerJoined(socketService.socket, (username) => {
+            console.log(`${username} joined`)
+        })
+    }
+
+    const handlePlayerLeaving = () => {
+        gameService.onPlayerLeft(socketService.socket, (username) => {
+            console.log(`${username} left`)
+        })
+    }
+
     useEffect(() => {
         scoresRef.current = scores
         handleGameUpdate();
+        handleNewPlayerJoining();
+        handlePlayerLeaving();
     }, [])
 
     // When score update is triggered, update the scoresRef to the new scores object

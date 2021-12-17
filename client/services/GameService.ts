@@ -58,6 +58,18 @@ class GameService {
             listener({ username, score })
         })
     }
+
+    public async onNewPlayerJoined(socket: Socket, listener: (username: string) => void) {
+        socket.on(EVENTS.SERVER.NEW_PLAYER_JOINED, (username) => {
+            listener(username)
+        })
+    }
+
+    public async onPlayerLeft(socket: Socket, listener: (username: string) => void) {
+        socket.on(EVENTS.SERVER.PLAYER_LEFT_ROOM, (username) => {
+            listener(username);
+        })
+    }
 }
 
 export default new GameService();

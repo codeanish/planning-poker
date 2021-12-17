@@ -10,14 +10,17 @@ const EVENTS = {
         JOINED_ROOM: "joined_room",
         PLAYED_CARD: "played_card",
         NEW_PLAYER_JOINED: "new_player_joined",
-        ERROR: "error"
+        ERROR: "error",
+        PLAYER_LEFT_ROOM: "player_left_room"
     },
     CLIENT: {
         CREATE_ROOM: "create_room",
         JOIN_ROOM: "join_room",
         PLAY_CARD: "play_card",
         LOGIN: "login",
-        GET_ROOMS: "get_rooms"
+        GET_ROOMS: "get_rooms",
+        DISCONNECT: "disconnect",
+        DISCONNECTING: "disconnecting"
     }
 }
 
@@ -34,6 +37,18 @@ const socket = ({ io }: { io: Server }) => {
     logger.info(`Sockets enabled`);
     io.on(EVENTS.CONNECTION, (socket: Socket) => {
         logger.info(`User connected: ${socket.id}`)
+
+        socket.on(EVENTS.CLIENT.DISCONNECT, () => {
+            logger.info(`Socket disconnect ${socket.id}`)
+            const user = users[socket.id]
+            logger.info(`Player ${user} leaving rooms`)
+            delete users[socket.id];
+            socket.broadcast.emit(EVENTS.SERVER.PLAYER_LEFT_ROOM, user)
+        })
+
+        socket.on(EVENTS.CLIENT.DISCONNECTING, () => {
+            logger.info(`Socket disconnecting ${socket.id}`)
+        })
         // Send connected user list of rooms
 
         socket.emit(EVENTS.SERVER.ROOMS, rooms);
@@ -44,12 +59,12 @@ const socket = ({ io }: { io: Server }) => {
 
         socket.on(EVENTS.CLIENT.JOIN_ROOM, ({ roomName, user }) => {
             logger.info(`Attempting to join ${roomName}`);
-            const roomIdFromRoomName = getRoomIdFromRoomName(roomName);
-            if (roomIdFromRoomName) {
-                logger.info(`Room ${roomName} already exists with ID ${roomIdFromRoomName}. Joining.`);
-                socket.join(roomIdFromRoomName)
-                socket.emit(EVENTS.SERVER.JOINED_ROOM, { roomIdFromRoomName, user, roomName });
-                socket.to(roomIdFromRoomName).emit(EVENTS.SERVER.NEW_PLAYER_JOINED, users[socket.id])
+            const roomId = getRoomIdFromRoomName(roomName);
+            if (roomId) {
+                logger.info(`Room ${roomName} already exists with ID ${roomId}. Joining.`);
+                socket.join(roomId)
+                socket.emit(EVENTS.SERVER.JOINED_ROOM, { roomIdFromRoomName: roomId, user, roomName });
+                socket.to(roomId).emit(EVENTS.SERVER.NEW_PLAYER_JOINED, users[socket.id])
                 return;
             }
         })
